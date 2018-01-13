@@ -1,2 +1,2 @@
-# juspay_Rotating_Cube
+# Rotating Cube Problem
 Rotating Cube In Purescript
