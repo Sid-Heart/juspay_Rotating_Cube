@@ -1,0 +1,33 @@
+{
+  "name": "rotcube",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output"
+  ],
+  "dependencies": {
+    "purescript-prelude": "^3.1.1",
+    "purescript-console": "^3.0.0",
+    "purescript-partial": "^1.2.1",
+    "purescript-canvas": "^3.3.0",
+    "purescript-random": "^3.0.0",
+    "purescript-foldable-traversable": "^3.7.1",
+    "purescript-arrays": "^4.2.2",
+    "purescript-dom": "^4.13.2",
+    "purescript-math": "^2.1.0",
+    "purescript-eff": "^3.1.0",
+    "purescript-control": "^3.3.1",
+    "purescript-functions": "^3.0.0",
+    "purescript-requestanimationframe": "^1.0.0",
+    "purescript-maybe": "^3.0.0",
+    "purescript-jquery": "^4.3.0",
+    "purescript-refs": "^3.0.0",
+    "purescript-drawing": "^3.0.0",
+    "purescript-outwatch": "^0.7.0",
+    "purescript-quickcheck": "^4.6.1"
+  },
+  "devDependencies": {
+    "purescript-psci-support": "^3.0.0"
+  }
+}
