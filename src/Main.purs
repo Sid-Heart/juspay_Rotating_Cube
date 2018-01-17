@@ -46,7 +46,8 @@ rotateY angle x y z = do
   let zz = z * (cos rad) - x * (sin rad)
   [xx,y,zz]
 
-dampingfactor x =x*0.9
+dampingfactor :: Number -> Number
+dampingfactor x = x * 0.9
 
 drawCube st_nodes st_edges ctx = void $ forE 0 12 $ \i ->  do
     --log "DrawCube"
@@ -81,28 +82,41 @@ drawCube st_nodes st_edges ctx = void $ forE 0 12 $ \i ->  do
     drawLine s_x s_y e_x e_y ctx
 
 ---- Mouse events
-mouseDown input oldx oldy e _ =  do
-  log "MouseDown"
+mouseDown input oldx oldy rx ry dragging e _ =  do
+  rxV <- readSTRef rx
+  ryV <- readSTRef ry
+  _ <- writeSTRef rx (rxV/5.0)
+  _ <- writeSTRef ry (ryV/5.0)
   pagex <- J.getPageX e
   pagey <- J.getPageY e
-  logShow ((pagex))
-  logShow ((pagey))
+  _ <- writeSTRef dragging true
+  --logShow ((pagex))
+  --logShow ((pagey))
   _ <- writeSTRef oldx {-((pagex -300.0)/300.0)-} pagex
   _ <- writeSTRef oldy {-((600.0 - pagey - 300.0)/(300.0))-} (600.0 -pagey)
   pure unit
 
-mouseUp input rxd ryd rx ry e _ =  do
-  pagex <- J.getPageX e
-  pagey <- J.getPageY e
-  logShow ((pagex))
-  logShow ((pagey))
-  rxdm <- readSTRef rxd
-  rydm <- readSTRef ryd
-  _ <- writeSTRef ry ((pagex - rxdm)/10.0)
-  _ <- writeSTRef rx (((600.0 - pagey) - rydm)/10.0)
-  logShow ((pagex - rxdm)/10.0)
-  logShow (((600.0 - pagey) - rydm)/10.0)
-  pure unit
+mouseMove input rxd ryd rx ry dragging e _ =  do
+ drag <- readSTRef dragging
+ if drag 
+  then do
+   pagex <- J.getPageX e
+   pagey <- J.getPageY e
+   --logShow ((pagex))
+   --logShow ((pagey))
+   rxdm <- readSTRef rxd
+   rydm <- readSTRef ryd
+   _ <- writeSTRef ry ((pagex - rxdm)*2.0)
+   _ <- writeSTRef rx (((600.0 - pagey) - rydm)*2.0)
+   _ <- writeSTRef rxd {-((pagex -300.0)/300.0)-} pagex
+   _ <- writeSTRef ryd {-((600.0 - pagey - 300.0)/(300.0))-} (600.0 -pagey) 
+   --logShow ((pagex - rxdm)/10.0)
+   --logShow (((600.0 - pagey) - rydm)/10.0)
+   pure unit
+  else pure unit
+
+mouseUp input rxd ryd rx ry dragging e _ =  do
+  writeSTRef dragging false
 
 main :: forall a b.       
         Eff                   
@@ -118,10 +132,12 @@ main = void $ unsafePartial do
   ryd <- newSTRef 0.0
   rx <- newSTRef 0.0
   ry <- newSTRef 0.0
+  dragging <- newSTRef false
 
   Just canvas <- getCanvasElementById "canvas"
   ctx <- getContext2D canvas
   canvas_jq <- J.getElementById "canvas"  
+  canvas_body <- J.getElementById "body"
 
   _ <- translate { translateX: 250.0, translateY:  250.0 } ctx -- translating the canvas
 
@@ -208,8 +224,7 @@ main = void $ unsafePartial do
 
 	requestAnimationFrame updateCube
   updateCube
-  J.on "mousedown" (mouseDown canvas rxd ryd) canvas_jq
-  J.on "mouseup" (mouseUp canvas rxd ryd rx ry) canvas_jq
-  
-
+  J.on "mousedown" (mouseDown canvas rxd ryd rx ry dragging) canvas_jq
+  J.on "mousemove" (mouseMove canvas rxd ryd rx ry dragging) canvas_jq
+  J.on "mouseup" (mouseUp canvas rxd ryd rx ry dragging) canvas_body
 
