@@ -12,3 +12,5 @@ between​​ rotation and swipe with the friction factor Y.​
 - Touch​/Click​​:​ 
 Generates friction that should decelerate the rotation further by a Y (friction factor)
 
+# Link
+https://sid-heart.github.io/juspay\_Rotating\_Cube
