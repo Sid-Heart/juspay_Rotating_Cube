@@ -13,4 +13,4 @@ between​​ rotation and swipe with the friction factor Y.​
 Generates friction that should decelerate the rotation further by a Y (friction factor)
 
 # Link
-https://sid-heart.github.io/juspay\_Rotating_Cube
+https://sid-heart.github.io/juspay_Rotating_Cube
